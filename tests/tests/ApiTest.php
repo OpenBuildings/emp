@@ -127,6 +127,44 @@ class ApiTest extends PHPUnit_Framework_TestCase {
 
 	/**
 	 * @covers Openbuildings\Emp\Api::request
+	 * @expectedException Openbuildings\Emp\Exception
+	 * @expectedExceptionMessage Error sendig request to gateway: (OP998) ErrorTEST
+	 */
+	public function test_request_error()
+	{
+		$instance = new Api('https://my.emerchantpay.com', getenv('PHP_EMP_CLIENT_ID'), getenv('PHP_EMP_API_KEY'));
+
+		$thm = new Threatmatrix(getenv('PHP_THREATMATRIX_ORG_ID'), getenv('PHP_EMP_CLIENT_ID'));
+		Remote::get($thm->tracking_url());
+
+		$instance
+			->threatmatrix($thm)
+			->request('/service/order/submit', array(
+			'card_holder_name'       => 'TEST HOLDER',
+			'card_number'            => '4111111111111111',
+			'exp_month'              => '10',
+			'exp_year'               => '19',
+			'cvv'                    => '123',
+			'order_reference'        => '521c7556ccdd8',
+			'order_currency'         => 'GBP',
+			'payment_method'         => 'creditcard',
+
+			'customer_email'         => 'test.user.purchase@example.com',
+
+			'test_transaction'       => '1',
+
+			'item_1_code'            => '1',
+			'item_1_qty'             => '1',
+			'item_1_predefined'      => '0',
+			'item_1_name'            => 'basket',
+			'item_1_unit_price_GBP'  => '1.97',
+
+			'ip_address'             => '95.87.212.88',
+			'credit_card_trans_type' => 'sale',
+		));
+	}
+	/**
+	 * @covers Openbuildings\Emp\Api::request
 	 */
 	public function test_correct_request()
 	{
