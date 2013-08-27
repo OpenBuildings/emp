@@ -1,0 +1,12 @@
+<<<<<<< HEAD
+.DS_Store
+
+/vendor/
+/build/
+/modules/
+=======
+build/
+cache/
+vendor/
+phpunit.xml
+>>>>>>> f4efc58f276a0f2b502fbb67cd1beb4271531a45
