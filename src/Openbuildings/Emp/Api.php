@@ -10,6 +10,116 @@ namespace Openbuildings\Emp;
  */
 class Api {
 
+	/**
+	 * This service allows direct payments via the Web Services API. It supports one o and managed recurring payments. For merchant managed rebilling please refer to the Merchant Managed Rebilling service definition.
+	 */
+	const ORDER_SUBMIT = '/service/order/submit';
+
+	/**
+	 * Merchant managed rebills allows merchant to control the rebill schedule, or to generate adhoc payments referencing an existing order.
+	 * This functionality is only available for merchants who have this functionality enabled, and who have corresponding non CVV/Rebill accounts configured.
+	 */
+	const MERCHANT_MANAGED_REBILL = '/service/order/rebill';
+
+	/**
+	 * This method will settle an Order previously performed as an Auth. This will generate an email notification to the customer on success if customer emails have been configured in your eCommerce Configuration. Notifications to the merchant are enabled by default.
+	 */
+	const ORDER_SETTLE = '/service/order/settle';
+
+	/**
+	 * This method will credit the specified item/transaction. Multiple items can be credited in the one request.
+	 * For Auth transactions – you must provide the Transaction ID of the Settlement transaction. If you wish to reverse the Auth you should use the Void method instead.
+	 */
+	const ORDER_CREDIT = '/service/order/credit';
+
+	/**
+	 * This method will perform a cardholder funds transfer for the specified Order.
+	 * CFT is only available if enabled by your Account Manager. CFT is not available for all merchant categories or payment types.
+	 * Successful CFT transactions will result in a pending response. Your request may require approval (based on your account setup), and will then be sent to the acquirer. You will receive a further notification once the request is approved/declined.
+	 */
+	const ORDER_CFT = '/service/order/cft';
+
+	/**
+	 * This method will void the specified Order. This method is only available if the original transaction was an Auth. Notification to the customer is not performed.
+	 */
+	const ORDER_VOID = '/service/order/void';
+
+	/**
+	 * This service allows retrieval of Order data for reconciliation.
+	 */
+	const ORDER_SEARCH = '/service/order/search';
+
+	/**
+	 * This service allows retrieval of transaction data for reconciliation.
+	 */
+	const TRANSACTION_SEARCH = '/service/transaction/search';
+
+	/**
+	 * This service allows retrieval of all TC40/SAFE data related to your accounts. This data is provided by select payment acquirers, which in turn receive this data from the card associations VISA and Mastercard.
+	 */
+	const FRAUD_DATA = '/service/risk/frauddata';
+
+	/**
+	 * This service allows retrieval of chargeback data for reconciliation purposes.
+	 */
+	const CHARGEBACK_SEARCH = '/service/chargeback/search';
+
+	/**
+	 * This service allows retrieval of previously created Customers for reconciliation purposes.
+	 */
+	const CUSTOMER_SEARCH = '/service/customer/search';
+
+	/**
+	 * This method will instantly upgrade an existing Rebill. Upgrade means to explicitly bring forward the rebilling date immediately, perform a transaction and start the rebilling period from now. The initial trial period for the item will no longer be valid.
+	 */
+	const ORDER_REBILL_INSTANT_UPGRADE = '/service/order/instantupgrade';
+
+	/**
+	 * This method will cancel an existing Rebill. No customer notification is performed.
+	 * Reversal of a cancellation is not supported. Usernames and Passwords associated with this Rebill will expire when the current Rebill cycle elapses.
+	 */
+	const ORDER_CANCEL_REBILLING = '/service/order/cancelrebill';
+
+	/**
+	 * This service allows initiation of a VBV/3D Secure Authentication request.
+	 */
+	const VBVMC3D_AUTH = '/service/vbvmc3d';
+
+	/**
+	 * This service allows retrieval of the results for a VBV/3D Secure Authentication request. This allows the merchant to retrieve fields required for submission in the Order Submit API method.
+	 */
+	const VBVMC3D_RESULT = '/service/vbvmc3d/result';
+
+	/**
+	 * The Customer Entity allows an easy way to group Orders together for a single Customer. Once a Customer ID is created - you can pass this information through on creation of new Orders.
+	 */
+	const CREATE_CUSTOMER = '/service/customer/add';
+
+	/**
+	 * The Customer Entity allows an easy way to group Orders together for a single Customer. This function allows you to update an existing Customer with a new Name or Email address.
+	 */
+	const UPDATE_CUSTOMER = '/service/customer/update';
+
+	/**
+	 * This method allows you to retrieve previous card details used by the Customer. Only cards which have been flagged by the Customer/Merchant to remember will be retrieved. Expired cards will not be retrieved. This services does not support non-credit card payment methods.
+	 */
+	const GET_CUSTOMER_CARDS = '/service/customer/getcards';
+
+	/**
+	 * Phone verify provides the ability to validate a customers identity using a phone verification service. It works by sending a unique code to the users phone that is then entered by the user and submitted with your payment request.
+	 */
+	const PHONE_VERIFY = '/service/phoneverify';
+
+	/**
+	 * This service allows retrieval of a list of INPay supported banks based on the customers country. The resulting bank id can then be passed into the Order Submit web service when making an INPay payment.
+	 */
+	const INPAY_BANKS = '/service/inpay/getbanks';
+
+	/**
+	 * This service allows retrieval of the payment instructions for an existing Order. The payment instructions provide the customer with the information they need to make the bank payment.
+	 */
+	const INPAY_INSTRUCTIONS = '/service/inpay/getinstructions';
+
 	protected static $_instance;
 
 	/**
