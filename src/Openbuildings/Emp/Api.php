@@ -280,7 +280,7 @@ class Api {
 			'order_id' => (string) $xml_response->order_id,
 			'order_status' => (string) $xml_response->order_status,
 			'transaction_response' => (string) $xml_response->transaction->response,
-			'transaction_id' => (string) $xml_response->transaction->transaction_id,
+			'transaction_id' => (string) $xml_response->transaction->trans_id,
 			'raw' => json_decode(json_encode($xml_response), TRUE),
 		);
 	}

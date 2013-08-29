@@ -200,6 +200,7 @@ class ApiTest extends PHPUnit_Framework_TestCase {
 		));
 
 		$this->assertEquals('Paid', $response['order_status']);
+		$this->assertGreaterThan(0, $response['transaction_id']);
 		$this->assertEquals('A', $response['transaction_response']);
 		$this->assertEquals(20.00, $response['raw']['order_total']);
 	}
