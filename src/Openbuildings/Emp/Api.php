@@ -120,6 +120,10 @@ class Api {
 	 */
 	const INPAY_INSTRUCTIONS = '/service/inpay/getinstructions';
 
+	/**
+	 * Threatmatrix should be used only on requests with user interaction in them, like order/submit. 
+	 * @var array
+	 */
 	protected static $_endpoints_with_threatmatrix = array(
 		self::ORDER_SUBMIT,
 	);
