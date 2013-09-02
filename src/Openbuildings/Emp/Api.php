@@ -120,6 +120,10 @@ class Api {
 	 */
 	const INPAY_INSTRUCTIONS = '/service/inpay/getinstructions';
 
+	protected static $_endpoints_with_threatmatrix = array(
+		self::ORDER_SUBMIT,
+	);
+
 	protected static $_instance;
 
 	/**
@@ -212,14 +216,14 @@ class Api {
 	 * Return the parameters required for authentication
 	 * @return array 
 	 */
-	public function auth_params()
+	public function auth_params($endpoint)
 	{
 		$params = array(
 			'client_id' => $this->client_id(), 
 			'api_key' => $this->api_key(),
 		);
 
-		if ($this->threatmatrix()) 
+		if (in_array($endpoint, self::$_endpoints_with_threatmatrix) AND $this->threatmatrix())
 		{
 			$params['thm_session_id'] = $this->threatmatrix()->session_id();
 		}
@@ -235,7 +239,7 @@ class Api {
 	 */
 	public function generate_url($endpoint, array $params)
 	{
-		$params = array_merge($this->auth_params(), $params);
+		$params = array_merge($this->auth_params($endpoint), $params);
 		$url = $this->_gateway_url.$endpoint;
 
 		return $url.'?'.http_build_query($params);
@@ -256,6 +260,9 @@ class Api {
 		$response = Remote::get($url);
 
 		$xml_response = new \SimpleXMLElement($response);
+
+		$trans_id = (string) ($xml_response->transaction->trans_id ?: $xml_response->trans_id);
+		$response_code = (string) ($xml_response->transaction->response ?: $xml_response->response);
 		
 		if ($xml_response->errors)
 		{
@@ -269,7 +276,7 @@ class Api {
 				':errors' => join(', ', $errors)
 			));
 		}
-		elseif ( (string) $xml_response->transaction->response === 'D')
+		elseif ( (string) $response_code === 'D')
 		{
 			throw new Exception('The transaction was declined: :errors', array(
 				':errors' => (string) $xml_response->transaction->response_text
@@ -279,8 +286,8 @@ class Api {
 		return array(
 			'order_id' => (string) $xml_response->order_id,
 			'order_status' => (string) $xml_response->order_status,
-			'transaction_response' => (string) $xml_response->transaction->response,
-			'transaction_id' => (string) $xml_response->transaction->trans_id,
+			'transaction_response' => $response_code,
+			'transaction_id' => $trans_id,
 			'raw' => json_decode(json_encode($xml_response), TRUE),
 		);
 	}

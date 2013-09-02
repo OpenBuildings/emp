@@ -47,13 +47,18 @@ class ApiTest extends PHPUnit_Framework_TestCase {
 	{
 		$instance = new Api('http://test.example.com', 'client-id-3', 'api-key-3');
 		$expected = array('client_id' => 'client-id-3', 'api_key' => 'api-key-3');
-		$this->assertEquals($expected, $instance->auth_params());
+		$this->assertEquals($expected, $instance->auth_params(Api::ORDER_SUBMIT));
 
 		$threatmatrix = new Threatmatrix('ORG_ID', 'CLIENT_ID');
 		$instance->threatmatrix($threatmatrix);
 
 		$expected = array('client_id' => 'client-id-3', 'api_key' => 'api-key-3', 'thm_session_id' => $threatmatrix->session_id());
-		$this->assertEquals($expected, $instance->auth_params());
+
+		$this->assertEquals($expected, $instance->auth_params(Api::ORDER_SUBMIT));
+
+		$expected = array('client_id' => 'client-id-3', 'api_key' => 'api-key-3');
+
+		$this->assertEquals($expected, $instance->auth_params(Api::ORDER_CREDIT));
 	}
 
 	/**
@@ -63,7 +68,7 @@ class ApiTest extends PHPUnit_Framework_TestCase {
 	{
 		$instance = new Api('https://my.emerchantpay.com', '11111111', 'TEST_API_KEY');
 
-		$url = $instance->generate_url('/service/order/submit', array(
+		$url = $instance->generate_url(Api::ORDER_SUBMIT, array(
 			'payment_type' => 'creditcard',
 			'thm_session_id' => 'TEST_SESSION_ID',
 		));
@@ -80,7 +85,7 @@ class ApiTest extends PHPUnit_Framework_TestCase {
 	{
 		$instance = new Api('https://my.emerchantpay.com', '11111111', 'TEST_API_KEY');
 
-		$instance->request('/service/order/submit', array(
+		$instance->request(Api::ORDER_SUBMIT, array(
 			'payment_type' => 'creditcard',
 			'test_transaction' => 1,
 		));
@@ -100,7 +105,7 @@ class ApiTest extends PHPUnit_Framework_TestCase {
 
 		$instance
 			->threatmatrix($thm)
-			->request('/service/order/submit', array(
+			->request(Api::ORDER_SUBMIT, array(
 			'card_holder_name'       => 'TEST HOLDER',
 			'card_number'            => '4111111111111111',
 			'exp_month'              => '10',
@@ -139,7 +144,7 @@ class ApiTest extends PHPUnit_Framework_TestCase {
 
 		$instance
 			->threatmatrix($thm)
-			->request('/service/order/submit', array(
+			->request(Api::ORDER_SUBMIT, array(
 			'card_holder_name'       => 'TEST HOLDER',
 			'card_number'            => '4111111111111111',
 			'exp_month'              => '10',
@@ -175,7 +180,7 @@ class ApiTest extends PHPUnit_Framework_TestCase {
 
 		$response = $instance
 			->threatmatrix($thm)
-			->request('/service/order/submit', array(
+			->request(Api::ORDER_SUBMIT, array(
 				'card_holder_name'       => 'TEST HOLDER',
 				'card_number'            => '4111111111111111',
 				'exp_month'              => '10',
@@ -197,11 +202,26 @@ class ApiTest extends PHPUnit_Framework_TestCase {
 
 				'ip_address'             => '95.87.212.88',
 				'credit_card_trans_type' => 'sale',
-		));
+			));
 
 		$this->assertEquals('Paid', $response['order_status']);
 		$this->assertGreaterThan(0, $response['transaction_id']);
 		$this->assertEquals('A', $response['transaction_response']);
 		$this->assertEquals(20.00, $response['raw']['order_total']);
+
+		$response = $instance
+			->threatmatrix($thm)
+			->request(Api::ORDER_CREDIT, array(
+				'trans_id'       => $response['transaction_id'],
+				'order_id'       => $response['order_id'],
+				'amount'         => $response['raw']['order_total'],
+				'reason'         => 'Test Credit Transaction',
+
+				'test_transaction'       => '1',
+			));
+
+		$this->assertGreaterThan(0, $response['transaction_id']);
+		$this->assertEquals('A', $response['transaction_response']);
+		$this->assertEquals('OP000', $response['raw']['responsecode']);
 	}
 }
