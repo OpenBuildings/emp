@@ -31,8 +31,5 @@
 	},
 	"autoload": {
 		"psr-0": {"Openbuildings\\Emp\\": "src/"}
-	},
-	"suggest": {
-		"openbuildings/paypal": "Easy payments with PayPal: ExpressCheckout, AdaptivePayments, subscriptions"
 	}
 }
