@@ -1,5 +1,9 @@
 # Emp
 
+[![Build Status](https://travis-ci.org/OpenBuildings/emp.png?branch=master)](https://travis-ci.org/OpenBuildings/emp)
+[![Coverage Status](https://coveralls.io/repos/OpenBuildings/emp/badge.png?branch=master)](https://coveralls.io/r/OpenBuildings/emp?branch=master)
+[![Latest Stable Version](https://poser.pugx.org/openbuildings/emp/v/stable.png)](https://packagist.org/packages/openbuildings/emp)
+
 This is an api for accessing eMerchantPay services
 
 ## A quick example
