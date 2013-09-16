@@ -114,10 +114,11 @@ class ApiTest extends PHPUnit_Framework_TestCase {
 		$instance = new Api('https://my.emerchantpay.com', getenv('EMP_CID'), getenv('EMP_KEY'));
 
 		$thm = new Threatmatrix(getenv('EMP_TMX'), getenv('EMP_CID'));
-		Remote::get($thm->tracking_url());
+		Remote::get($thm->tracking_url(), array(CURLOPT_PROXY => getenv('EMP_PROXY')));
 
 		$instance
 			->threatmatrix($thm)
+			->proxy(getenv('EMP_PROXY'))
 			->request(Api::ORDER_SUBMIT, array(
 			'card_holder_name'       => 'TEST HOLDER',
 			'card_number'            => '4111111111111111',
