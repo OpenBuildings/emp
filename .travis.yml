@@ -1,0 +1,22 @@
+--- 
+env: 
+  secure: |-
+    T8xU+TNdcNJaTQr0Qly2vVX1Ljr1WY017GFRp3DIxvODIVzXeueRQSLjQogu
+    uk/xkpMT+AdNuRMERKSltfMj1tRgJiuPNKYeB9LCKn68NhHyqcEoZuwjtK27
+    /7QeX0YUXcEj9NR9U3rsyUCmLVeWo06TD1wewPf2Hl5Gf7rt3j4=
+
+language: php
+
+php:
+  - 5.4
+
+script:
+  - phpunit --coverage-clover build/logs/clover.xml
+
+before_script:
+  - mkdir -p build/logs
+  - composer require --dev satooshi/php-coveralls:dev-master
+  - composer install
+
+after_script:
+  - php vendor/bin/coveralls -v

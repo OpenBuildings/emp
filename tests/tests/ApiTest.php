@@ -40,6 +40,19 @@ class ApiTest extends PHPUnit_Framework_TestCase {
 	}
 
 	/**
+	 * @covers Openbuildings\Emp\Api::proxy
+	 */
+	public function test_proxy()
+	{
+		$instance = new Api('http://test.example.com', 'client-id-2', 'api-key-2');
+		$this->assertNull($instance->proxy());
+
+		$instance->proxy('SOME PROXY');
+
+		$this->assertEquals('SOME PROXY', $instance->proxy());
+	}
+
+	/**
 	 * @covers Openbuildings\Emp\Api::auth_params
 	 * @covers Openbuildings\Emp\Api::threatmatrix
 	 */
@@ -98,9 +111,9 @@ class ApiTest extends PHPUnit_Framework_TestCase {
 	 */
 	public function test_request_declined()
 	{
-		$instance = new Api('https://my.emerchantpay.com', getenv('PHP_EMP_CLIENT_ID'), getenv('PHP_EMP_API_KEY'));
+		$instance = new Api('https://my.emerchantpay.com', getenv('EMP_CID'), getenv('EMP_KEY'));
 
-		$thm = new Threatmatrix(getenv('PHP_THREATMATRIX_ORG_ID'), getenv('PHP_EMP_CLIENT_ID'));
+		$thm = new Threatmatrix(getenv('EMP_TMX'), getenv('EMP_CID'));
 		Remote::get($thm->tracking_url());
 
 		$instance
@@ -137,13 +150,14 @@ class ApiTest extends PHPUnit_Framework_TestCase {
 	 */
 	public function test_request_error()
 	{
-		$instance = new Api('https://my.emerchantpay.com', getenv('PHP_EMP_CLIENT_ID'), getenv('PHP_EMP_API_KEY'));
+		$instance = new Api('https://my.emerchantpay.com', getenv('EMP_CID'), getenv('EMP_KEY'));
 
-		$thm = new Threatmatrix(getenv('PHP_THREATMATRIX_ORG_ID'), getenv('PHP_EMP_CLIENT_ID'));
-		Remote::get($thm->tracking_url());
+		$thm = new Threatmatrix(getenv('EMP_TMX'), getenv('EMP_CID'));
+		Remote::get($thm->tracking_url(), array(CURLOPT_PROXY => getenv('EMP_PROXY')));
 
 		$instance
 			->threatmatrix($thm)
+			->proxy(getenv('EMP_PROXY'))
 			->request(Api::ORDER_SUBMIT, array(
 			'card_holder_name'       => 'TEST HOLDER',
 			'card_number'            => '4111111111111111',
@@ -168,18 +182,20 @@ class ApiTest extends PHPUnit_Framework_TestCase {
 			'credit_card_trans_type' => 'sale',
 		));
 	}
+
 	/**
 	 * @covers Openbuildings\Emp\Api::request
 	 */
 	public function test_correct_request()
 	{
-		$instance = new Api('https://my.emerchantpay.com', getenv('PHP_EMP_CLIENT_ID'), getenv('PHP_EMP_API_KEY'));
+		$instance = new Api('https://my.emerchantpay.com', getenv('EMP_CID'), getenv('EMP_KEY'));
 
-		$thm = new Threatmatrix(getenv('PHP_THREATMATRIX_ORG_ID'), getenv('PHP_EMP_CLIENT_ID'));
-		Remote::get($thm->tracking_url());
+		$thm = new Threatmatrix(getenv('EMP_TMX'), getenv('EMP_CID'));
+		Remote::get($thm->tracking_url(), array(CURLOPT_PROXY => getenv('EMP_PROXY')));
 
 		$response = $instance
 			->threatmatrix($thm)
+			->proxy(getenv('EMP_PROXY'))
 			->request(Api::ORDER_SUBMIT, array(
 				'card_holder_name'       => 'TEST HOLDER',
 				'card_number'            => '4111111111111111',

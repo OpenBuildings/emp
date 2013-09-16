@@ -16,7 +16,7 @@ class Remote {
 	 * @param  string $url 
 	 * @return string      
 	 */
-	public static function get($url)
+	public static function get($url, array $custom_options = NULL)
 	{
 		if ( ! filter_var($url, FILTER_VALIDATE_URL, FILTER_FLAG_PATH_REQUIRED)) 
 			throw new Exception('Endpoint :url not a valid url', array(':url' => $url));
@@ -30,6 +30,11 @@ class Remote {
 			CURLOPT_URL            => $url,
 			CURLOPT_USERAGENT      => 'Openbuildings\\Emp Api 0.1',
 		);
+
+		if ($custom_options) 
+		{
+			$options = $options + $custom_options;
+		}
 
 		$curl = curl_init();
 

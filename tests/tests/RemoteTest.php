@@ -20,6 +20,20 @@ class RemoteTest extends PHPUnit_Framework_TestCase {
 
 	/**
 	 * @covers Openbuildings\Emp\Remote::get
+	 */
+	public function test_get_proxy()
+	{
+		$options = array(
+			CURLOPT_PROXY => 'payment:polipo@staging.clippings.com:8123',
+		);
+
+		$response = Remote::get('https://3533bfdb7f646acec3be-0cd42b8dee15b5017160a1d30c7ce549.ssl.cf3.rackcdn.com/test.txt', $options);
+
+		$this->assertEquals('test', $response);
+	}
+
+	/**
+	 * @covers Openbuildings\Emp\Remote::get
 	 * @expectedException Openbuildings\Emp\Exception
 	 * @expectedExceptionCode 404
 	 */

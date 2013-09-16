@@ -157,7 +157,8 @@ class Api {
 	protected $_client_id;
 	protected $_api_key;
 	protected $_gateway_url;
-
+	protected $_proxy;
+	
 	/**
 	 * Threatmatrix object, used to set thm_session_Id
 	 * @var Threatmarix
@@ -190,6 +191,22 @@ class Api {
 	{
 		return $this->_gateway_url;
 	}
+
+	/**
+	 * Getter / Setter, should be in a format user:password@host:port
+	 * @param  string $proxy 
+	 * @return string        
+	 */
+	public function proxy($proxy = NULL)
+	{
+		if ($proxy !== NULL)
+		{
+			$this->_proxy = $proxy;
+			return $this;
+		}
+		return $this->_proxy;
+	}
+
 
 	/**
 	 * Getter / Setter of a Threatmatrix object
@@ -261,7 +278,14 @@ class Api {
 	{
 		$url = $this->generate_url($endpoint, $params);
 
-		$response = Remote::get($url);
+		$options = array();
+
+		if ($this->proxy()) 
+		{
+			$options[CURLOPT_PROXY] = $this->proxy();
+		}
+
+		$response = Remote::get($url, $options);
 
 		$xml_response = new \SimpleXMLElement($response);
 
