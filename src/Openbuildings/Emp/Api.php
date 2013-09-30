@@ -226,7 +226,7 @@ class Api {
 	function __construct($gateway_url, $client_id, $api_key)
 	{
 		if ( ! filter_var($gateway_url, FILTER_VALIDATE_URL)) 
-			throw Exception('Gateway url must be a proper url');
+			throw new Exception('Gateway url must be a proper url');
 		
 		$this->_client_id = $client_id;
 		$this->_api_key = $api_key;
