@@ -29,7 +29,7 @@ class Threatmatrix implements \Serializable {
 	public static function instance()
 	{
 		if ( ! self::$_instance) 
-			throw Exception('You need to run Threatmatrix::configure to be able to use the global api instance');
+			throw new Exception('You need to run Threatmatrix::configure to be able to use the global api instance');
 
 		return self::$_instance;
 	}
