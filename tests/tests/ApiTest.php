@@ -87,6 +87,11 @@ class ApiTest extends PHPUnit_Framework_TestCase {
 		));
 
 		$this->assertEquals('https://my.emerchantpay.com/service/order/submit?client_id=11111111&api_key=TEST_API_KEY&payment_type=creditcard&thm_session_id=TEST_SESSION_ID', $url);
+
+		$url = $instance->test(TRUE)->generate_url(Api::ORDER_SUBMIT, array());
+
+		$this->assertEquals('https://my.emerchantpay.com/service/order/submit?client_id=11111111&api_key=TEST_API_KEY&test_transaction=1', $url);
+
 	}
 
 	/**

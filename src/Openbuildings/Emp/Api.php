@@ -158,6 +158,23 @@ class Api {
 	protected $_api_key;
 	protected $_gateway_url;
 	protected $_proxy;
+	protected $_test = FALSE;
+	
+
+	/**
+	 * Set all transactions to be "test_transaction = 1"
+	 * @param  boolean $test 
+	 * @return boolean
+	 */
+	public function test($test = NULL)
+	{
+		if ($test !== NULL)
+		{
+			$this->_test = $test;
+			return $this;
+		}
+		return $this->_test;
+	}
 	
 	/**
 	 * Threatmatrix object, used to set thm_session_Id
@@ -247,6 +264,11 @@ class Api {
 		if (in_array($endpoint, self::$_endpoints_with_threatmatrix) AND $this->threatmatrix())
 		{
 			$params['thm_session_id'] = $this->threatmatrix()->session_id();
+		}
+
+		if ($this->test())
+		{
+			$params['test_transaction'] = '1';
 		}
 
 		return $params;
