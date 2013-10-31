@@ -97,7 +97,7 @@ class ApiTest extends PHPUnit_Framework_TestCase {
 	/**
 	 * @covers Openbuildings\Emp\Api::request
 	 * @expectedException Openbuildings\Emp\Exception
-	 * @expectedExceptionMessage Error sendig request to gateway: (OP903) Authentication failure
+	 * @expectedExceptionMessage Authentication failure (OP903)
 	 */
 	public function test_request()
 	{
@@ -112,7 +112,7 @@ class ApiTest extends PHPUnit_Framework_TestCase {
 	/**
 	 * @covers Openbuildings\Emp\Api::request
 	 * @expectedException Openbuildings\Emp\Exception
-	 * @expectedExceptionMessage The transaction was declined: DeclineTEST
+	 * @expectedExceptionMessage Transaction declined: DeclineTEST
 	 */
 	public function test_request_declined()
 	{
@@ -152,7 +152,7 @@ class ApiTest extends PHPUnit_Framework_TestCase {
 	/**
 	 * @covers Openbuildings\Emp\Api::request
 	 * @expectedException Openbuildings\Emp\Exception
-	 * @expectedExceptionMessage Error sendig request to gateway: (OP998) ErrorTEST
+	 * @expectedExceptionMessage ErrorTEST (OP998)
 	 */
 	public function test_request_error()
 	{

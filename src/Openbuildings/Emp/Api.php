@@ -314,21 +314,13 @@ class Api {
 		$trans_id = (string) ($xml_response->transaction->trans_id ?: $xml_response->trans_id);
 		$response_code = (string) ($xml_response->transaction->response ?: $xml_response->response);
 		
-		if ($xml_response->errors)
+		if ($xml_response->errors AND ($error = $xml_response->errors[0]->error))
 		{
-			$errors = array();
-			foreach ($xml_response->errors as $error) 
-			{
-				$errors[] = '('.$error->error->code.') '.$error->error->text;
-			}
-				
-			throw new Exception('Error sendig request to gateway: :errors', array(
-				':errors' => join(', ', $errors)
-			));
+			throw new Exception(':error (:code)', array(':error' => (string) $error->text, ':code' => (string) $error->code));
 		}
 		elseif ( (string) $response_code === 'D')
 		{
-			throw new Exception('The transaction was declined: :errors', array(
+			throw new Exception('Transaction declined: :errors', array(
 				':errors' => (string) $xml_response->transaction->response_text
 			));
 		}
