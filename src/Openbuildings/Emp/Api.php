@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 namespace Openbuildings\Emp;
 
@@ -121,7 +121,7 @@ class Api {
 	const INPAY_INSTRUCTIONS = '/service/inpay/getinstructions';
 
 	/**
-	 * Threatmatrix should be used only on requests with user interaction in them, like order/submit. 
+	 * Threatmatrix should be used only on requests with user interaction in them, like order/submit.
 	 * @var array
 	 */
 	protected static $_endpoints_with_threatmatrix = array(
@@ -132,23 +132,23 @@ class Api {
 
 	/**
 	 * Configure the default instance (Api::instance())
-	 * 
+	 *
 	 * @param  string $gateway_url url
-	 * @param  string $client_id   
-	 * @param  string $api_key     
+	 * @param  string $client_id
+	 * @param  string $api_key
 	 */
 	public static function configure($gateway_url, $client_id, $api_key)
 	{
 		self::$_instance = new Api($gateway_url, $client_id, $api_key);
 	}
-	
+
 	/**
 	 * return the default instance, you need to run Api::configure() to set it up
-	 * @return Api 
+	 * @return Api
 	 */
 	public static function instance()
 	{
-		if ( ! self::$_instance) 
+		if ( ! self::$_instance)
 			throw new Exception('You need to run Api::configure to be able to use the global api instance');
 
 		return self::$_instance;
@@ -159,11 +159,11 @@ class Api {
 	protected $_gateway_url;
 	protected $_proxy;
 	protected $_test = FALSE;
-	
+
 
 	/**
 	 * Set all transactions to be "test_transaction = 1"
-	 * @param  boolean $test 
+	 * @param  boolean $test
 	 * @return boolean
 	 */
 	public function test($test = NULL)
@@ -175,7 +175,7 @@ class Api {
 		}
 		return $this->_test;
 	}
-	
+
 	/**
 	 * Threatmatrix object, used to set thm_session_Id
 	 * @var Threatmarix
@@ -184,7 +184,7 @@ class Api {
 
 	/**
 	 * Getter
-	 * @return string 
+	 * @return string
 	 */
 	public function client_id()
 	{
@@ -193,7 +193,7 @@ class Api {
 
 	/**
 	 * Getter
-	 * @return string 
+	 * @return string
 	 */
 	public function api_key()
 	{
@@ -211,8 +211,8 @@ class Api {
 
 	/**
 	 * Getter / Setter, should be in a format user:password@host:port
-	 * @param  string $proxy 
-	 * @return string        
+	 * @param  string $proxy
+	 * @return string
 	 */
 	public function proxy($proxy = NULL)
 	{
@@ -227,8 +227,8 @@ class Api {
 
 	/**
 	 * Getter / Setter of a Threatmatrix object
-	 * @param  Threatmatrix $threatmatrix 
-	 * @return Threatmatrix|$this               
+	 * @param  Threatmatrix $threatmatrix
+	 * @return Threatmatrix|$this
 	 */
 	public function threatmatrix($threatmatrix = NULL)
 	{
@@ -242,9 +242,9 @@ class Api {
 
 	function __construct($gateway_url, $client_id, $api_key)
 	{
-		if ( ! filter_var($gateway_url, FILTER_VALIDATE_URL)) 
+		if ( ! filter_var($gateway_url, FILTER_VALIDATE_URL))
 			throw new Exception('Gateway url must be a proper url');
-		
+
 		$this->_client_id = $client_id;
 		$this->_api_key = $api_key;
 		$this->_gateway_url = $gateway_url;
@@ -252,12 +252,12 @@ class Api {
 
 	/**
 	 * Return the parameters required for authentication
-	 * @return array 
+	 * @return array
 	 */
 	public function auth_params($endpoint)
 	{
 		$params = array(
-			'client_id' => $this->client_id(), 
+			'client_id' => $this->client_id(),
 			'api_key' => $this->api_key(),
 		);
 
@@ -276,9 +276,9 @@ class Api {
 
 	/**
 	 * Generate a url for an api request
-	 * @param  string $endpoint 
-	 * @param  array  $params   
-	 * @return string           
+	 * @param  string $endpoint
+	 * @param  array  $params
+	 * @return string
 	 */
 	public function generate_url($endpoint, array $params)
 	{
@@ -290,30 +290,32 @@ class Api {
 
 	/**
 	 * Perform an api request, return an array with result details
-	 * 
-	 * @param  string $endpoint 
-	 * @param  array  $params   
+	 *
+	 * @param  string $endpoint
+	 * @param  array  $params
 	 * @throws Openbuildings\Emp\Exception If errors in request, api response or the card is declined
-	 * @return array           
+	 * @return array
 	 */
 	public function request($endpoint, array $params)
 	{
-		$url = $this->generate_url($endpoint, $params);
+		$params = array_merge($this->auth_params($endpoint), $params);
+
+		$url = $url = $this->_gateway_url.$endpoint;
 
 		$options = array();
 
-		if ($this->proxy()) 
+		if ($this->proxy())
 		{
 			$options[CURLOPT_PROXY] = $this->proxy();
 		}
 
-		$response = Remote::get($url, $options);
+		$response = Remote::post($url, $params, $options);
 
 		$xml_response = new \SimpleXMLElement($response);
 
 		$trans_id = (string) ($xml_response->transaction->trans_id ?: $xml_response->trans_id);
 		$response_code = (string) ($xml_response->transaction->response ?: $xml_response->response);
-		
+
 		if ($xml_response->errors AND ($error = $xml_response->errors[0]->error))
 		{
 			throw new Exception(':error (:code)', array(':error' => (string) $error->text, ':code' => (string) $error->code));
@@ -324,7 +326,7 @@ class Api {
 				':errors' => (string) $xml_response->transaction->response_text
 			));
 		}
-		
+
 		return array(
 			'order_id' => (string) $xml_response->order_id,
 			'order_status' => (string) $xml_response->order_status,

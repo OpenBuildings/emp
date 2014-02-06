@@ -10,6 +10,7 @@ class RemoteTest extends PHPUnit_Framework_TestCase {
 
 	/**
 	 * @covers Openbuildings\Emp\Remote::get
+	 * @covers Openbuildings\Emp\Remote::execute
 	 */
 	public function test_get()
 	{
@@ -41,7 +42,7 @@ class RemoteTest extends PHPUnit_Framework_TestCase {
 	{
 		$response = Remote::get('https://3533bfdb7f646acec3be-0cd42b8dee15b5017160a1d30c7ce549.ssl.cf3.rackcdn.com/');
 	}
-	
+
 	/**
 	 * @covers Openbuildings\Emp\Remote::get
 	 * @expectedException Openbuildings\Emp\Exception
@@ -53,7 +54,7 @@ class RemoteTest extends PHPUnit_Framework_TestCase {
 	}
 
 	/**
-	 * @covers Openbuildings\Emp\Remote::get
+	 * @covers Openbuildings\Emp\Remote::execute
 	 * @expectedException Openbuildings\Emp\Exception
 	 * @expectedExceptionMessage Endpoint mm://3 not a valid url
 	 */
