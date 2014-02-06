@@ -63,7 +63,7 @@ class Remote {
 			$options = $options + $custom_options;
 		}
 
-		return static::execute($options);
+		return self::execute($options);
 	}
 
 	public static function post($url, array $data, array $custom_options = NULL)
@@ -88,6 +88,6 @@ class Remote {
 			$options = $options + $custom_options;
 		}
 
-		return static::execute($options);
+		return self::execute($options);
 	}
 }
