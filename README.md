@@ -1,7 +1,8 @@
 # Emp
 
 [![Build Status](https://travis-ci.org/OpenBuildings/emp.png?branch=master)](https://travis-ci.org/OpenBuildings/emp)
-[![Coverage Status](https://coveralls.io/repos/OpenBuildings/emp/badge.png?branch=master)](https://coveralls.io/r/OpenBuildings/emp?branch=master)
+[![Scrutinizer Quality Score](https://scrutinizer-ci.com/g/OpenBuildings/emp/badges/quality-score.png?s=c800823347a3e11db1b54e556903fb7fa7f80ecb)](https://scrutinizer-ci.com/g/OpenBuildings/emp/)
+[![Code Coverage](https://scrutinizer-ci.com/g/OpenBuildings/emp/badges/coverage.png?s=b71850f54200e624e45a163c16b806e75fabc54d)](https://scrutinizer-ci.com/g/OpenBuildings/emp/)
 [![Latest Stable Version](https://poser.pugx.org/openbuildings/emp/v/stable.png)](https://packagist.org/packages/openbuildings/emp)
 
 This is an api for accessing eMerchantPay services
