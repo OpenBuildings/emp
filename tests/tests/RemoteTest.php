@@ -3,7 +3,7 @@
 use Openbuildings\Emp\Remote;
 
 /**
- * @package 
+ * @package
  * @group   remote
  */
 class RemoteTest extends PHPUnit_Framework_TestCase {

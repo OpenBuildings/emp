@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 namespace Openbuildings\Emp;
 
@@ -14,8 +14,8 @@ class Threatmatrix implements \Serializable {
 
 	/**
 	 * Configure the default instance (Threatmatrix::instance())
-	 * @param  string $org_id    
-	 * @param  string $client_id 
+	 * @param  string $org_id
+	 * @param  string $client_id
 	 */
 	public static function configure($org_id, $client_id)
 	{
@@ -28,7 +28,7 @@ class Threatmatrix implements \Serializable {
 	 */
 	public static function instance()
 	{
-		if ( ! self::$_instance) 
+		if ( ! self::$_instance)
 			throw new Exception('You need to run Threatmatrix::configure to be able to use the global api instance');
 
 		return self::$_instance;
@@ -47,7 +47,7 @@ class Threatmatrix implements \Serializable {
 
 	/**
 	 * Return the tracking code, that has to be placed to the page where the payment form is
-	 * @return string 
+	 * @return string
 	 */
 	public function tracking_code()
 	{
@@ -67,7 +67,7 @@ TRACKING;
 
 	/**
 	 * Return a simple url to register the tracking with online matrix
-	 * @return string 
+	 * @return string
 	 */
 	public function tracking_url()
 	{
@@ -77,7 +77,7 @@ TRACKING;
 	}
 
 	/**
-	 * Getter 
+	 * Getter
 	 * @return string
 	 */
 	public function org_id()
@@ -105,7 +105,7 @@ TRACKING;
 
 	/**
 	 * Return query parameters for tracking
-	 * @return string 
+	 * @return string
 	 */
 	public function tracking_params()
 	{
@@ -117,7 +117,7 @@ TRACKING;
 
 	/**
 	 * Implement Serializable
-	 * @return string 
+	 * @return string
 	 */
 	public function serialize()
 	{
@@ -132,7 +132,7 @@ TRACKING;
 
 	/**
 	 * Implement Serializable
-	 * @param  string $data 
+	 * @param  string $data
 	 */
 	public function unserialize($data)
 	{
@@ -141,5 +141,5 @@ TRACKING;
 		$this->_session_id = $data[1];
 		$this->_session2 = $data[2];
 	}
-	
+
 }

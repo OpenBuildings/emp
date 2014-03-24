@@ -5,7 +5,7 @@ use Openbuildings\Emp\Api;
 use Openbuildings\Emp\Remote;
 
 /**
- * @package 
+ * @package
  * @group   api
  */
 class ApiTest extends PHPUnit_Framework_TestCase {

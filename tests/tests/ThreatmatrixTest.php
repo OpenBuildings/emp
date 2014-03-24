@@ -3,7 +3,7 @@
 use Openbuildings\Emp\Threatmatrix;
 
 /**
- * @package 
+ * @package
  * @group   threatmatrix
  */
 class ThreatmatrixTest extends PHPUnit_Framework_TestCase {
@@ -44,7 +44,7 @@ class ThreatmatrixTest extends PHPUnit_Framework_TestCase {
 	{
 		$instance = new Threatmatrix('myorg2', 'client-id-3');
 		$string = serialize($instance);
-		
+
 		$instance2 = unserialize($string);
 
 		$this->assertEquals($instance, $instance2);
