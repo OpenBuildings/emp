@@ -79,7 +79,7 @@ class Remote {
 			CURLOPT_MAXREDIRS      => 2,
 			CURLOPT_URL            => $url,
 			CURLOPT_POST           => TRUE,
-			CURLOPT_POSTFIELDS     => $data,
+			CURLOPT_POSTFIELDS     => http_build_query($data),
 			CURLOPT_USERAGENT      => 'Openbuildings\\Emp Api 0.1',
 		);
 
