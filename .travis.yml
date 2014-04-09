@@ -9,12 +9,17 @@ language: php
 php:
   - 5.4
 
+notifications:
+  email: false
+  slack:
+    secure: YHBz3h5dgWa+WGj4/fBkeXjf+VOzaknk9b544QsjpPa7X0Tjw0ucR1U2bG9CobqMj6E2ZEOCtGU9cdcxPMzKj2dNrb5JYtEfojsTBsXuWUgKAB63OOb3ImSvCLMST9k05+UTAnrv0ojf5a1dr79eOrktksTB1NxbHZuCyDFDWEU=
+
 install:
   - composer selfupdate
+  - composer install
 
 before_script:
   - mkdir -p build/logs
-  - composer install
 
 script:
   - phpunit --coverage-clover build/logs/clover.xml
