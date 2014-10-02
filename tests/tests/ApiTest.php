@@ -53,6 +53,19 @@ class ApiTest extends PHPUnit_Framework_TestCase {
 	}
 
 	/**
+	 * @covers Openbuildings\Emp\Api::options
+	 */
+	public function test_options()
+	{
+		$instance = new Api('http://test.example.com', 'client-id-2', 'api-key-2');
+		$this->assertEmpty($instance->options());
+
+		$instance->options(array(CURLOPT_INTERFACE => '192.168.0.1'));
+
+		$this->assertEquals(array(CURLOPT_INTERFACE => '192.168.0.1'), $instance->options());
+	}
+
+	/**
 	 * @covers Openbuildings\Emp\Api::auth_params
 	 * @covers Openbuildings\Emp\Api::threatmatrix
 	 */
@@ -124,6 +137,7 @@ class ApiTest extends PHPUnit_Framework_TestCase {
 		$instance
 			->threatmatrix($thm)
 			->proxy(getenv('EMP_PROXY'))
+			->options(array(CURLOPT_TIMEOUT => 10))
 			->request(Api::ORDER_SUBMIT, array(
 			'card_holder_name'       => 'TEST HOLDER',
 			'card_number'            => '4111111111111111',
@@ -202,6 +216,7 @@ class ApiTest extends PHPUnit_Framework_TestCase {
 		$response = $instance
 			->threatmatrix($thm)
 			->proxy(getenv('EMP_PROXY'))
+			->options(array(CURLOPT_TIMEOUT => 60))
 			->request(Api::ORDER_SUBMIT, array(
 				'card_holder_name'       => 'TEST HOLDER',
 				'card_number'            => '4111111111111111',

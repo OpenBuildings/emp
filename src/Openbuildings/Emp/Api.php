@@ -158,6 +158,7 @@ class Api {
 	protected $_api_key;
 	protected $_gateway_url;
 	protected $_proxy;
+	protected $_options = array();
 	protected $_test = FALSE;
 
 
@@ -222,6 +223,21 @@ class Api {
 			return $this;
 		}
 		return $this->_proxy;
+	}
+
+	/**
+	 * Getter / Setter, should be in a format user:password@host:port
+	 * @param  array $proxy
+	 * @return array
+	 */
+	public function options(array $options = NULL)
+	{
+		if ($options !== NULL)
+		{
+			$this->_options = $options;
+			return $this;
+		}
+		return $this->_options;
 	}
 
 
@@ -302,7 +318,7 @@ class Api {
 
 		$url = $url = $this->_gateway_url.$endpoint;
 
-		$options = array();
+		$options = $this->_options;
 
 		if ($this->proxy())
 		{
