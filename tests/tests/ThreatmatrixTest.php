@@ -85,9 +85,8 @@ class ThreatmatrixTest extends PHPUnit_Framework_TestCase {
 
 		$code = $instance->tracking_code();
 
-		$this->assertSelectCount('img', 1, $code);
-		$this->assertSelectCount('object', 1, $code);
-		$this->assertSelectCount('script', 1, $code);
+		$this->assertContains('<img src="https://h.online-metrix.net/fp/clear.png?', $code);
+		$this->assertContains('<script src="https://h.online-metrix.net/fp/check.js?', $code);
 
 		$this->assertContains($instance->tracking_params(), $code);
 	}
